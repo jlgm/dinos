@@ -12,7 +12,6 @@
 ;;;;
 ;; Board operations
 ;;;;
-
 (defn zeros*
   "generates a lazy sequence with only zeros"
   []
@@ -94,14 +93,14 @@
   (apply str (map prettify-row board)))
 
 ;;;;
-;; robots' movement operations
+;; robots operations
 ;;;;
-
 (def up-vec [0 -1])
 (def down-vec [0 1])
 (def right-vec [1 0])
 (def left-vec [-1 0])
 
+;; movements
 (defn move
   "returns new position based on given position and given direction"
   [[x y] dir]
@@ -132,13 +131,14 @@
   [board [x y]]
   (do-move board [x y] -))
 
+;; rotations
 (defn turn-right
   [dir]
-  (case dir
-    [0 -1] right-vec
-    [1 0] down-vec
-    [0 1] left-vec
-    [-1 0] up-vec))
+  (cond
+    (= dir up-vec) right-vec
+    (= dir right-vec) down-vec
+    (= dir down-vec) left-vec
+    (= dir left-vec) up-vec))
 
 (defn turn-left
   [dir]
@@ -159,8 +159,9 @@
   [board [x y]]
   (rotate board [x y] turn-left))
 
+;; attack
 (defn do-attack
-  "attacks from given position or returns the board if attack is not valid"
+  "erases given position or returns the board if attack is not valid"
   [board [x y]]
   (if (and (valid? board [x y]) (dino? board [x y]))
     (erase-position board [x y])
@@ -180,7 +181,6 @@
 ;;;;
 ;; board state management
 ;;;;
-
 (def board-dim 50)
 
 (def board-state (atom (new-board board-dim)))
@@ -203,7 +203,6 @@
 ;;;;
 ;; API logic
 ;;;;
-
 (defn show-board-state
   []
   (let [response {:status 200
