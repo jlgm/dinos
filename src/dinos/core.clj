@@ -109,22 +109,6 @@
   [[x y] dir]
   (map + [x y] dir))
 
-(defn go-up
-  [[x y]]
-  (move [x y] up-vec))
-
-(defn go-down
-  [[x y]]
-  (move [x y] down-vec))
-
-(defn go-right
-  [[x y]]
-  (move [x y] right-vec))
-
-(defn go-left
-  [[x y]]
-  (move [x y] left-vec))
-
 (defn can-move?
   "returns true if robot can move to the given position"
   [board [x y]]
@@ -192,10 +176,10 @@
   "makes robot from given position attack its adjacent positions"
   [board [x y]]
   (if (robot? board [x y])
-    (let [left (go-left [x y])
-          right (go-right [x y])
-          down (go-down [x y])
-          up (go-up [x y])]
+    (let [left (move [x y] left-vec)
+          right (move [x y] right-vec)
+          down (move [x y down-vec])
+          up (move [x y] up-vec)]
       (reduce do-attack board [left right down up]))
     board))
 
