@@ -73,7 +73,6 @@
       (is (not (valid? a-board [10 11]))))))
 
 ;; testing robots commands
-
 (deftest move-test
   (testing "if function returns the sum of given coordinates with a direction vector"
     (is (= (move [2 2] [-1 0]) [1 2]))
@@ -102,7 +101,6 @@
     (testing "if default robot walks for its 'right' on a fwd-move"
       (is (= (fwd-move a-board [2 2]) (place-robot (new-board 10) [3 2]))))))
 
-
 (deftest rev-move-test
   (let [a-board (place-robot (new-board 10) [2 2])]
     (testing "if default robot walks for its 'left' on a rev-move"
@@ -127,7 +125,6 @@
     (let [a-board (place-robot (new-board 10) [2 2])]
       (is (= (get-item (rotate-right a-board [2 2]) [2 2]) [0 1])))))
 
-
 (deftest rotate-left-test
   (testing "if robots change it's direction vector for a left rotation"
     (let [a-board (place-robot (new-board 10) [2 2])]
@@ -138,7 +135,6 @@
     (let [a-board (place-dino (new-board 10) [1 2])]
       (is (= (new-board 10) (do-attack a-board [1 2]))))))
 
-
 (deftest attack-test
   (testing "if robot erases all dinos from (only) its adjacent cells"
     (let [a-board (place-robot (new-board 10) [2 2])
@@ -147,5 +143,20 @@
       (is (= (attack an-away-dino-board [2 2]) an-away-dino-board))
       (is (= (attack a-dino-board [2 2]) a-board)))))
 
+;; board state tests
+(deftest get-state-test
+  (testing "if initially the board state references a dimxdim grid with all zeros"
+    (is (= (get-state) (new-board board-dim)))))
 
+(deftest change-state-test
+  (testing "if state changes with the application of a function"
+    (is (= (change-state place-robot [1 1]) (place-robot (new-board board-dim) [1 1])))
+    (is (= (get-state) (place-robot (new-board board-dim) [1 1])))))
 
+(deftest reset-board-state-test
+  (testing "if resetting the board state returns a new empty dimxdim grid"
+    (is (= (reset-board-state) (new-board board-dim)))))
+
+;; api logic tests
+
+;; TODO

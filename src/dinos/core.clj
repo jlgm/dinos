@@ -185,11 +185,6 @@
 
 (def board-state (atom (new-board board-dim)))
 
-(defn reset-board-state
-  "resets board state to default value"
-  [& args]
-  (reset! board-state (new-board board-dim)))
-
 (defn get-state
   "returns the current state of the board"
   [& args]
@@ -199,6 +194,11 @@
   "receives a board function and change state to the return of this function"
   [f args]
   (swap! board-state f args))
+
+(defn reset-board-state
+  "resets board state to default value"
+  [& args]
+  (reset! board-state (new-board board-dim)))
 
 ;;;;
 ;; API logic
