@@ -57,25 +57,25 @@
   [board [x y]]
   (place-in-board board [x y] free))
 
-(defn item?
-  "verifies if given item is on the given position"
-  [board [x y] value]
-  (= (nth (nth board y) x) value))
+(defn get-item 
+  "returns item on given position"
+  [board [x y]]
+  (nth (nth board y) x))
 
 (defn robot?
   "verifies if there's a robot on given position"
   [board [x y]]
-  (sequential? (nth (nth board y) x)))
+  (sequential? (get-item board [x y])))
 
 (defn dino?
   "verifies if there's a dino on given position"
   [board [x y]]
-  (item? board [x y] dino))
+  (= (get-item board [x y]) dino))
 
 (defn free?
   "verifies if given position is free"
   [board [x y]]
-  (item? board [x y] free))
+  (= (get-item board [x y]) free))
 
 (defn valid?
   "returns true if (x,y) is inside the board"
@@ -83,13 +83,8 @@
   (let [dim (count board)]
     (and (>= x 0) (< x dim) (>= y 0) (< y dim))))
 
-(defn get-item 
-  "returns item on given position"
-  [board [x y]]
-  (nth (nth board y) x))
-
 (defn prettify
-  "converts a board row to a string with pretty symbols"
+  "converts a board row to a string with pretty html symbols"
   [row]
   (str (apply str (map #(if (= % 0) "#" 
                      (if (= % 2) "D" "R")) row)) "<br>"))
@@ -186,26 +181,6 @@
   [board [x y]]
   (rotate board [x y] turn-left))
 
-;(defn move-up
-;  "returns a new board with the robot above it's current position"
-;  [board [x y]]
-;  (do-move board [x y] go-up))
-;
-;(defn move-down
-;  "returns a new board with the robot below it's current position"
-;  [board [x y]]
-;  (do-move board [x y] go-down))
-;
-;(defn move-right
-;  "returns a new board with the robot going to the right of it's current position"
-;  [board [x y]]
-;  (do-move board [x y] go-right))
-;
-;(defn move-left
-;  "returns a new board with the robot going to the left of it's current position"
-;  [board [x y]]
-;  (do-move board [x y] go-left))
-;
 (defn do-attack
   "attacks from given position or returns the board if attack is not valid"
   [board [x y]]
@@ -256,31 +231,58 @@
   []
   (let [response {:status 200
                   :headers {"Content-Type" "text/html"}
-                  :body (str "<script>document.write(" (json/write-str (pretty-board (get-state))) ")</script>")}]
+                  :body (str "<meta http-equiv=\"refresh\" content=\"2\"><script>document.write(" (json/write-str (pretty-board (get-state))) ")</script>")}]
     response))
 
-(defn a-handler
-  [req]
-  ;(do (println (json/read-str (slurp (:body req))))
-  (let [body (json/read-str (slurp (:body req)) :key-fn keyword)
-        response {:status 200
-                  :body (json/write-str body)}]
-    (println (:a body))
-    response))
+(defn do-action
+  [req f]
+  (try
+    (let [body (json/read-str (slurp (:body req)) :key-fn keyword)
+          response {:status 200}]
+      (change-state f [(:x body) (:y body)])
+      response)
+  (catch Exception ex
+    {:status 500
+     :body "something is not right"})))
 
 (defn place-dino-handler
   [req]
-  (let [body (json/read-str (slurp (:body req)) :key-fn keyword)
-        response {:status 200}]
-    (change-state place-dino [(:x body) (:y body)])
-    response))
+  (do-action req place-dino))
 
+(defn place-robot-handler
+  [req]
+  (do-action req place-robot))
+
+(defn rotate-left-handler
+  [req]
+  (do-action req rotate-left))
+
+(defn rotate-right-handler
+  [req]
+  (do-action req rotate-right))
+
+(defn fwd-move-handler
+  [req]
+  (do-action req fwd-move))
+
+(defn rev-move-handler
+  [req]
+  (do-action req rev-move))
+
+(defn attack-handler
+  [req]
+  (do-action req attack))
 
 (defroutes app
   (GET "/" [] "<h1>Welcome</h1>")
   (GET "/show-state" [] (show-board-state))
-  (POST "/test-req" [] a-handler)
   (POST "/place-dino" [] place-dino-handler)
+  (POST "/place-robot" [] place-robot-handler)
+  (POST "/rotate-left" [] rotate-left-handler)
+  (POST "/rotate-right" [] rotate-right-handler)
+  (POST "/attack" [] attack-handler)
+  (POST "/fwd-move" [] fwd-move-handler)
+  (POST "/rev-move" [] rev-move-handler)
   (route/not-found "<h1>Page not found</h1>"))
 
 
