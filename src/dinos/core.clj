@@ -207,7 +207,7 @@
   []
   (let [response {:status 200
                   :headers {"Content-Type" "text/html"}
-                  :body (str "<meta http-equiv=\"refresh\" content=\"2\"><script>document.write(" (json/write-str (pretty-board (get-state))) ")</script>")}]
+                  :body (str "<meta http-equiv=\"refresh\" content=\"2\"><body>" (str (pretty-board (get-state))) "</body>" )}]
     response))
 
 (defn do-action
