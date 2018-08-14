@@ -1,13 +1,12 @@
 (ns dinos.core
   (:require [clojure.data.json :as json])
   (:require [org.httpkit.server :refer [run-server]]
-            [clj-time.core :as t]
             [compojure.core :refer :all]
             [compojure.route :as route])
   (:gen-class))
 
 (def free 0)
-(def robot [1 0])
+(def robot [1 0]) ;robots default direction is "to the right"
 (def dino 2)
 
 ;;;;
@@ -94,7 +93,6 @@
   [board]
   (apply str (map prettify-row board)))
 
-
 ;;;;
 ;; robots' movement operations
 ;;;;
@@ -118,11 +116,11 @@
   "returns a new board with robot's position indicated by f or the board if move is not valid"
   [board [x y] f]
   (if (robot? board [x y])
-    (let [cur (get-item board [x y])
-          dir (map f cur)
+    (let [item (get-item board [x y])
+          dir (map f item)
           pos (move [x y] dir)]
       (if (can-move? board pos)
-        (place-in-board (erase-position board [x y]) pos cur)
+        (place-in-board (erase-position board [x y]) pos item)
       board))
     board))
 
@@ -144,11 +142,7 @@
 
 (defn turn-left
   [dir]
-  (case dir
-    [0 -1] left-vec
-    [-1 0] down-vec
-    [0 1] right-vec
-    [1 0] up-vec))
+  (into [] (map - (turn-right dir))))
 
 (defn rotate
   [board [x y] f]
@@ -206,7 +200,6 @@
   [f args]
   (swap! board-state f args))
 
-
 ;;;;
 ;; API logic
 ;;;;
@@ -226,8 +219,8 @@
       (change-state f [(:x body) (:y body)])
       response)
   (catch Exception ex
-    {:status 500
-     :body "something is not right"})))
+    {:status 400
+     :body "bad request"})))
 
 (defn place-dino-handler
   [req]
@@ -245,7 +238,9 @@
       "rev-move" (do-action req rev-move)
       "attack" (do-action req attack)
       "rotate-left" (do-action req rotate-left)
-      "rotate-right" (do-action req rotate-right))))
+      "rotate-right" (do-action req rotate-right)
+      {:status 400
+       :body "bad request"})))
 
 (defroutes app
   (GET "/" [] "<h1>Welcome</h1>")
