@@ -83,7 +83,7 @@
   (let [dim (count board)]
     (and (>= x 0) (< x dim) (>= y 0) (< y dim))))
 
-(defn prettify
+(defn prettify-row
   "converts a board row to a string with pretty html symbols"
   [row]
   (str (apply str (map #(if (= % 0) "#" 
@@ -92,7 +92,7 @@
 (defn pretty-board
   "prettify board for better representation"
   [board]
-  (apply str (map prettify board)))
+  (apply str (map prettify-row board)))
 
 
 ;;;;
@@ -178,7 +178,7 @@
   (if (robot? board [x y])
     (let [left (move [x y] left-vec)
           right (move [x y] right-vec)
-          down (move [x y down-vec])
+          down (move [x y] down-vec)
           up (move [x y] up-vec)]
       (reduce do-attack board [left right down up]))
     board))
@@ -237,36 +237,22 @@
   [req]
   (do-action req place-robot))
 
-(defn rotate-left-handler
+(defn robot-cmd-handler
   [req]
-  (do-action req rotate-left))
-
-(defn rotate-right-handler
-  [req]
-  (do-action req rotate-right))
-
-(defn fwd-move-handler
-  [req]
-  (do-action req fwd-move))
-
-(defn rev-move-handler
-  [req]
-  (do-action req rev-move))
-
-(defn attack-handler
-  [req]
-  (do-action req attack))
+  (let [cmd (-> req :params :op)]
+    (case cmd
+      "fwd-move" (do-action req fwd-move)
+      "rev-move" (do-action req rev-move)
+      "attack" (do-action req attack)
+      "rotate-left" (do-action req rotate-left)
+      "rotate-right" (do-action req rotate-right))))
 
 (defroutes app
   (GET "/" [] "<h1>Welcome</h1>")
   (GET "/show-state" [] (show-board-state))
   (POST "/place-dino" [] place-dino-handler)
   (POST "/place-robot" [] place-robot-handler)
-  (POST "/rotate-left" [] rotate-left-handler)
-  (POST "/rotate-right" [] rotate-right-handler)
-  (POST "/attack" [] attack-handler)
-  (POST "/fwd-move" [] fwd-move-handler)
-  (POST "/rev-move" [] rev-move-handler)
+  (POST "/robot-cmd/:op" [] robot-cmd-handler)
   (route/not-found "<h1>Page not found</h1>"))
 
 
