@@ -77,13 +77,16 @@ Please notice this board is 5x5 for illustration purpose. The real board will be
 
 Run all unit tests with command: `lein test`
 
+## Documentation
+
+An automatically generated documentation are available on the `doc` folder.
+
 ## Final Observations
 
 * Issuing an invalid command will either return a 400 code or just ignore the command
 * Attempting to place a robot (or dinosaur) into an occupied cell will replace it
 * No integration tests are provided
 * `/show-state` will refresh automatically after 2 seconds
-
 
 ## License
 
