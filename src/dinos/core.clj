@@ -197,7 +197,7 @@
 
 (defn reset-board-state
   "resets board state to default value"
-  [& args]
+  [& args] ;; TODO: use swap! instead?
   (reset! board-state (new-board board-dim)))
 
 ;;;;
@@ -241,12 +241,20 @@
       {:status 400
        :body "bad request"})))
 
+(defn reset-board-handler
+  [& _]
+  (let [response {:status 200}]
+    (reset-board-state)
+    response))
+
+
 (defroutes app
   (GET "/" [] "<h1>Welcome</h1>")
   (GET "/show-state" [] (show-board-state))
   (POST "/place-dino" [] place-dino-handler)
   (POST "/place-robot" [] place-robot-handler)
   (POST "/robot-cmd/:op" [] robot-cmd-handler)
+  (POST "/reset-board" [] reset-board-handler)
   (route/not-found "<h1>Page not found</h1>"))
 
 

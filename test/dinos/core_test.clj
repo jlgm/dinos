@@ -158,5 +158,13 @@
     (is (= (reset-board-state) (new-board board-dim)))))
 
 ;; api logic tests
+(deftest show-board-state-test
+  (testing "if show-board-state returns a 200 code"
+    (is (= 200 (:status (show-board-state)))))
+  (testing "if there's a body"
+    (is (not (nil? (:body (show-board-state)))))))
 
-;; TODO
+(deftest do-action-test
+  (testing "if do-action returns a 400 for a bad request"
+    (is (= 400 (:status (do-action {:body 1} place-robot))))))
+
