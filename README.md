@@ -47,17 +47,16 @@ The API will then be listening on port 8080.
 	- Resets the board state to an empty grid
 	- Example: `curl --data "{}" http://localhost:8080/reset-board`
 
-## Ilustration
+## Illustration
 
 This is how a **GET /show-state** would print the grid on a browser:
 
 ```
-#####...
-#####...
-#####...
-#####...
-#####...
-...
+#####
+#####
+#####
+#####
+#####
 ```
 
 Now, if we add a dinosaur on the [1 1] position: `curl --data "{\"x\":1,\"y\":1}" http://localhost:8080/place-dino`
@@ -65,13 +64,14 @@ Now, if we add a dinosaur on the [1 1] position: `curl --data "{\"x\":1,\"y\":1}
 This is how the board will look like:
 
 ```
-#####...
-#D###...
-#####...
-#####...
-#####...
-...
+#####
+#D###
+#####
+#####
+#####
 ```
+
+Please notice this board is 5x5 for illustration purpose. The real board will be 50x50.
 
 ## Testing
 
