@@ -1,6 +1,6 @@
 # Dinos x Robots Simulator
 
-This is a service that provides an API for simulating robots walking on a grid and fighting some dinosaurs. 
+This project provides an API for simulating robots walking on a grid and fighting some dinosaurs - even though these poor creatures are already extinct. 
 
 ## Requirements
 
@@ -10,11 +10,8 @@ This is a service that provides an API for simulating robots walking on a grid a
 ## Running
 
 Run with command: `lein run`
+
 The API will then be listening on port 8080.
-
-## Testing
-
-Run all unit tests with command: `lein test`
 
 ## Features
 
@@ -43,12 +40,16 @@ Run all unit tests with command: `lein test`
 
 * **POST /robot-cmd/:op**
 	- Execute a robot command
-	- Valids :op are: `fwd-move` `rev-move` `rotate-left` `rotate-right` `attack`
+	- Valids operations (:op) are: `fwd-move` `rev-move` `rotate-left` `rotate-right` `attack`
 	- Example: `curl --data "{\"x\":45,\"y\":0}" http://localhost:8080/robot-cmd/attack`
 
 * **POST /reset-board**
 	- Resets the board state to an empty grid
 	- Example: `curl --data "{}" http://localhost:8080/reset-board`
+
+## Testing
+
+Run all unit tests with command: `lein test`
 
 ## License
 
