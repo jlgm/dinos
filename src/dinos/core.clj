@@ -224,7 +224,7 @@
       (change-state f [(:x body) (:y body)])
       response)
   (catch Exception ex
-    (log/error "Error on " (:uri req) (.getMessage ex))
+    ;(log/error "Error on " (:uri req) (.getMessage ex))
     {:status 400
      :body "bad request"})))
 

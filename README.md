@@ -85,7 +85,6 @@ An automatically generated documentation are available on the `doc` folder.
 
 * Issuing an invalid command will either return a 400 code or just ignore the command
 * Attempting to place a robot (or dinosaur) into an occupied cell will replace it
-* No integration tests are provided
 * `/show-state` will refresh automatically after 2 seconds
 
 ## License
