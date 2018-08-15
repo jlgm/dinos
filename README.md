@@ -17,12 +17,13 @@ The API will then be listening on port 8080.
 
 * Create an empty grid (default 50 x 50)
 * Place a robot in a certain position (robots by default are facing to the right)
-* Place a dinosaur in a certain position (dinasours don't move)
+* Place a dinosaur in a certain position (dinosaurs don't move)
 * Issue commands to a robot, such as:
-	- turn left/right
-	- move forward/backwards
+	- turn left or right
+	- move forward or backwards
 	- attack
 * Display current board state
+* Reset board
 
 ### Routes
 
@@ -79,7 +80,7 @@ Run all unit tests with command: `lein test`
 
 ## Documentation
 
-An automatically generated documentation are available on the `doc` folder.
+An automatically generated documentation is available on the `doc` folder.
 
 ## Final Observations
 
