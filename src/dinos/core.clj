@@ -3,6 +3,7 @@
   (:require [org.httpkit.server :refer [run-server]]
             [compojure.core :refer :all]
             [compojure.route :as route])
+  (:require [clojure.tools.logging :as log])
   (:gen-class))
 
 (def free 0)
@@ -223,6 +224,7 @@
       (change-state f [(:x body) (:y body)])
       response)
   (catch Exception ex
+    (log/error "Error on " (:uri req) (.getMessage ex))
     {:status 400
      :body "bad request"})))
 
@@ -251,7 +253,6 @@
   (let [response {:status 200}]
     (reset-board-state)
     response))
-
 
 (defroutes app
   (GET "/" [] "<h1>Welcome</h1>")

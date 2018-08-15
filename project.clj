@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"] 
                  [org.clojure/data.json "0.2.6"]
+                 [org.clojure/tools.logging "0.4.1"]
                  [compojure "1.6.1"]
                  [http-kit "2.3.0"]]
   :main ^:skip-aot dinos.core
