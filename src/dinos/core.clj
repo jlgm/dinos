@@ -112,7 +112,8 @@
   (and (valid? board [x y]) (free? board [x y])))
 
 (defn do-move
-  "returns a new board with robot's position indicated by f or the board if move is not valid"
+  "returns a new board with robot's position indicated by f.
+  returns the board if move is not valid"
   [board [x y] f]
   (if (robot? board [x y])
     (let [item (get-item board [x y])
@@ -124,10 +125,12 @@
     board))
 
 (defn fwd-move
+  "moves robot forward in according to its current direction"
   [board [x y]]
   (do-move board [x y] identity))
   
 (defn rev-move
+  "moves robot backwards in according to its current direction"
   [board [x y]]
   (do-move board [x y] -))
 
@@ -145,6 +148,8 @@
   (into [] (map - (turn-right dir))))
 
 (defn rotate
+  "changes robot direction clockwise or counterclockwise
+  (determined by f)"
   [board [x y] f]
   (if (robot? board [x y])
     (let [pos (get-item board [x y])]
