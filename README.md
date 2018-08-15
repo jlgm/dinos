@@ -47,9 +47,43 @@ The API will then be listening on port 8080.
 	- Resets the board state to an empty grid
 	- Example: `curl --data "{}" http://localhost:8080/reset-board`
 
+## Ilustration
+
+This is how a **GET /show-state** would print the grid on a browser:
+
+```
+#####...
+#####...
+#####...
+#####...
+#####...
+...
+```
+
+Now, if we add a dinosaur on the [1 1] position: `curl --data "{\"x\":1,\"y\":1}" http://localhost:8080/place-dino`
+
+This is how the board will look like:
+
+```
+#####...
+#D###...
+#####...
+#####...
+#####...
+...
+```
+
 ## Testing
 
 Run all unit tests with command: `lein test`
+
+## Final Observations
+
+* Issuing an invalid command will either return a 400 code or just ignore the command
+* Attempting to place a robot (or dinosaur) into an occupied cell will replace it
+* No integration tests are provided
+* `/show-state` will refresh automatically after 2 seconds
+
 
 ## License
 
